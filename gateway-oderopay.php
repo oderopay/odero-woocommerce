@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: OderoPay WooCommerce Gateway
+ * Plugin Name: OderoPay Gateway
  * Description: Receive payments in RON and EUR
  * Author: OderoPay Team
  * Author URI: http://github.com/oderopay
