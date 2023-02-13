@@ -1,0 +1,20 @@
+{
+    "name": "oderopay/woocommerce",
+    "description": "OderoPay Woocommerce Gateway",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "bencagri",
+            "email": "selam@bencagri.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2.5 || ^8.0",
+        "oderopay/odero-php": "^1.0",
+        "symfony/deprecation-contracts": "^2.5",
+        "league/iso3166": "^4.2"
+    },
+    "config": {
+        "platform-check": false
+    }
+}

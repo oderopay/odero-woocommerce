@@ -1,0 +1,35 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    name: PHP ${{ matrix.php }} (${{ matrix.os }})
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ 7.3, 7.4, 8.0, 8.1 ]
+        os: [ ubuntu-20.04 ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: ${{ matrix.php }}
+
+      - name: Show Php Version
+        run: php -v
+
+      - name: Composer Install
+        run: composer install --prefer-dist --ignore-platform-reqs
+
+      - name: PHP Spec
+        uses: php-actions/phpspec@master
+        with:
+          config: phpspec.yml

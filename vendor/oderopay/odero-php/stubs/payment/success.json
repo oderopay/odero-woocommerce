@@ -1,0 +1,9 @@
+{
+  "code" : 200,
+  "message": "string",
+  "operationId": "uuid",
+  "data": {
+    "paymentId": "uuid",
+    "url": "string"
+  }
+}

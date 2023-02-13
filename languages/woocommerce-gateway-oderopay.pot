@@ -1,0 +1,381 @@
+# Copyright (C) 2022
+# This file is distributed under the same license as the  package.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: "
+"https://wordpress.org/support/plugin/woocommerce-gateway-oderopay\n"
+"POT-Creation-Date: 2022-12-06 18:12:34+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2022-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Generator: node-wp-i18n 1.2.6\n"
+
+#: gateway-oderopay.php:50
+msgid "Settings"
+msgstr ""
+
+#: gateway-oderopay.php:51
+msgid "Support"
+msgstr ""
+
+#: gateway-oderopay.php:52
+msgid "Docs"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay-privacy.php:12
+#: includes/class-wc-gateway-oderopay.php:35
+#: includes/class-wc-gateway-oderopay.php:121
+#: includes/class-wc-gateway-oderopay.php:259
+msgid "OderoPay"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay-privacy.php:14
+msgid "WooCommerce OderoPay Order Data"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay-privacy.php:17
+msgid "WooCommerce OderoPay Subscriptions Data"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay-privacy.php:20
+msgid "WooCommerce OderoPay Data"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay-privacy.php:54
+msgid ""
+"By using this extension, you may be storing personal data or sharing data "
+"with an external service. <a href=\"%s\" target=\"_blank\">Learn more about "
+"how this works, including what you may want to include in your privacy "
+"policy.</a>"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay-privacy.php:77
+msgid "Orders"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay-privacy.php:81
+msgid "OderoPay token"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay-privacy.php:138
+msgid "Subscriptions"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay-privacy.php:142
+msgid "OderoPay subscription token"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay-privacy.php:222
+msgid "Order ID %d contains an active Subscription"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay-privacy.php:235
+msgid "OderoPay Subscriptions Data Erased."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay-privacy.php:254
+msgid "OderoPay Order Data Erased."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:37
+#. translators: 1: a href link 2: closing href
+msgid ""
+"OderoPay works by sending the user to %1$sOderoPay%2$s to enter their payment "
+"information."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:110
+msgid "Enable/Disable"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:111
+msgid "Enable OderoPay"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:113
+msgid "This controls whether or not this gateway is enabled within WooCommerce."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:118
+msgid "Title"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:120
+msgid "This controls the title which the user sees during checkout."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:125
+msgid "Description"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:127
+msgid "This controls the description which the user sees during checkout."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:132
+msgid "OderoPay Sandbox"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:134
+msgid "Place the payment gateway in development mode."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:138
+msgid "Merchant ID"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:140
+msgid "This is the merchant ID, received from OderoPay."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:144
+msgid "Merchant Token"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:146
+msgid "This is the merchant toke , received from OderoPay."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:150
+msgid "Passphrase"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:152
+msgid "* Required. Needed to ensure the data passed through is secure."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:156
+msgid "Send Debug Emails"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:158
+msgid ""
+"Send debug e-mails for transactions through the OderoPay gateway (sends on "
+"successful transaction as well)."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:162
+msgid "Who Receives Debug E-mails?"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:164
+msgid ""
+"The e-mail address to which debugging error e-mails are sent when in test "
+"mode."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:168
+msgid "Enable Logging"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:170
+msgid "Enable transaction logging for gateway."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:205
+msgid "Sandbox Merchant ID currently in use"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:206
+msgid "Sandbox Merchant Key currently in use"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:260
+msgid "Gateway Disabled"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:260
+#. translators: 1: a href link 2: closing href
+msgid ""
+"Choose RON, EUR or USD as your store currency in %1$sGeneral "
+"Settings%2$s to enable the OderoPay Gateway."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:291
+#. translators: 1: blog info name
+msgid "New order from %s"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:364
+msgid "Pay via OderoPay"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:364
+msgid "Cancel order &amp; restore cart"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:369
+msgid ""
+"Thank you for your order. We are now redirecting you to OderoPay to make "
+"payment."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:418
+msgid "Thank you for your order, please click the button below to pay with OderoPay."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:694
+msgid "Merchant cancelled subscription on OderoPay."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:710
+msgid "ITN payment completed"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:741
+#. translators: 1: gross amount 2: payment id
+msgid "OderoPay pre-order fee paid: R %1$s (%2$s)"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:750
+#. translators: 1: gross amount 2: payment id
+msgid "OderoPay pre-order product line total paid: R %1$s (%2$s)"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:794
+#: includes/class-wc-gateway-oderopay.php:823
+#. translators: 1: payment status
+msgid "Payment %s via ITN."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1017
+#. translators: 1: error code 2: error message
+msgid "OderoPay Subscription renewal transaction failed (%1$s:%2$s)"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1020
+msgid "OderoPay Subscription renewal transaction submitted."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1107
+msgid "Can not submit OderoPay request with an empty token"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1251
+#. translators: 1: error code 2: error message
+msgid "OderoPay Pre-Order payment transaction failed (%1$s:%2$s)"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1294
+msgid "Amount mismatch"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1295
+msgid "Bad access of page"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1296
+msgid "Bad source IP address"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1297
+msgid "Failed to connect to OderoPay"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1298
+msgid "Security signature mismatch"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1299
+msgid "Merchant ID mismatch"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1300
+msgid "No saved session found for ITN transaction"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1301
+msgid "Order ID not present in URL"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1302
+msgid "Order ID mismatch"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1303
+msgid "This order ID is invalid"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1304
+msgid "Order Number mismatch"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1305
+msgid "This order has already been processed"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1306
+msgid "PDT query failed"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1307
+msgid "PDT token not present in URL"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1308
+msgid "Session ID mismatch"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1309
+msgid "Unkown error occurred"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1312
+msgid "Payment was successful"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1313
+msgid "Payment has failed"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1314
+msgid ""
+"The payment is pending. Please note, you will receive another Instant "
+"Transaction Notification when the payment status changes to \"Completed\", "
+"or \"Failed\""
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1481
+msgid "Your store uses a currency that OderoPay doesnt support yet."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1483
+msgid "You forgot to fill your merchant ID."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1485
+msgid "You forgot to fill your merchant token."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1487
+msgid "OderoPay requires a passphrase to work."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1516
+msgid "To use OderoPay as a payment provider, you need to fix the problems below:"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1543
+msgid "This represents the fee OderoPay collects for the transaction."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1544
+msgid "OderoPay Fee:"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1573
+msgid "This represents the net total that was credited to your OderoPay account."
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:1574
+msgid "Amount Net:"
+msgstr ""
+
+#: includes/class-wc-gateway-oderopay.php:287
+msgctxt "hash before order number"
+msgid "#"
+msgstr ""
