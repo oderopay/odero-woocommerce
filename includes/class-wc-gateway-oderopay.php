@@ -466,12 +466,24 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
                 $paymentId = $message->getData()['paymentId'];
 
                 //find order with payment id
-                $orders = wc_get_orders( array( self::ODERO_PAYMENT_KEY => $paymentId) );
+                $findOrderArgs = array(
+                    'post_type' => 'shop_order',
+                    'post_status' => array_keys(wc_get_order_statuses()),
+                    'meta_query' => array(
+                        'meta_value' => array(
+                            'key' => self::ODERO_PAYMENT_KEY,
+                            'value' => $paymentId,
+                            'compare' => '==',
+                        )
+                    )
+                );
 
-                if(empty($orders)) return;
+                $orders =  new WP_Query($findOrderArgs);
+
+                if(empty($orders->posts)) return;
 
                 /** @var WC_Order $order */
-                $order = $orders[0];
+                $order = wc_get_order($orders->posts[0]->ID);
 
                 if ($message->getStatus() === 'SUCCESS'){
                     //set order as paid
@@ -669,9 +681,11 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
      * @return array
      */
     public function handle_order_number_custom_query_var( $query, $query_vars ) {
+
+        var_dump($query_vars); exit();
         if ( ! empty( $query_vars[self::ODERO_PAYMENT_KEY] ) ) {
             $query['meta_query'][] = array(
-                'key' => '_order_number',
+                'key' => self::ODERO_PAYMENT_KEY,
                 'value' => esc_attr( $query_vars[self::ODERO_PAYMENT_KEY] ),
             );
         }
