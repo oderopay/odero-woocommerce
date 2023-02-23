@@ -388,6 +388,35 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 
         }
 
+        //add shipping cost
+        if($order->get_shipping_total() > 0){
+            $cargoImage = WP_PLUGIN_URL . '/' . plugin_basename( dirname( dirname( __FILE__ ) ) ) . '/assets/images/cargo.webp';
+            $shippingItem = new \Oderopay\Model\Payment\BasketItem();
+            $shippingItem
+                ->setExtId( $order->get_shipping_method())
+                ->setImageUrl( $cargoImage)
+                ->setName($order->get_shipping_method())
+                ->setPrice($order->get_shipping_total())
+                ->setQuantity(1);
+            $products[] = $shippingItem;
+        }
+
+        foreach( $order->get_coupon_codes() as $coupon_code ) {
+            $coupon = new WC_Coupon($coupon_code);
+
+            $amount  = WC()->cart->get_coupon_discount_amount( $coupon->get_code(), WC()->cart->display_cart_ex_tax );
+
+            $couponImage = WP_PLUGIN_URL . '/' . plugin_basename( dirname( dirname( __FILE__ ) ) ) . '/assets/images/voucher.png';
+            $couponItem = new \Oderopay\Model\Payment\BasketItem();
+            $couponItem
+                ->setExtId($coupon->get_id())
+                ->setImageUrl($couponImage)
+                ->setName($coupon->get_code())
+                ->setPrice($amount)
+                ->setQuantity(-1);
+            $products[] = $couponItem;
+        }
+
         $returnUrl = $this->get_return_url( $order );
 
         $paymentRequest = new \Oderopay\Model\Payment\Payment();
@@ -432,7 +461,6 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
             wc_add_notice(  $payment->getMessage(), 'error' );
         }
 
-        return;
 
 	}
 
