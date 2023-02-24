@@ -359,11 +359,13 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
             ->setCountry($country['alpha3'])
             ->setDeliveryType($order->get_shipping_method());
 
+        $phone = $order->get_billing_phone() ?? $order->get_shipping_phone();
+        $phoneNumber = $this->add_country_code_to_phone($phone, $country);
 
         $customer = new \Oderopay\Model\Payment\Customer();
         $customer
             ->setEmail($order->get_billing_email())
-            ->setPhoneNumber($order->get_billing_phone() ?? $order->get_shipping_phone())
+            ->setPhoneNumber($phoneNumber)
             ->setDeliveryInformation($deliveryAddress)
             ->setBillingInformation($billingAddress);
 
@@ -730,5 +732,12 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 
         return $country ?: 'RO';
 
+    }
+
+    private function add_country_code_to_phone(?string $phone, array $country)
+    {
+        $code = WC()->countries->get_country_calling_code( $country['alpha2'] );
+
+        return preg_replace('/^(?:\+?'. (int) $code.'|0)?/',$code, $phone);
     }
 }
