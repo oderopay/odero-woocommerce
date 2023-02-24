@@ -737,7 +737,6 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
     private function add_country_code_to_phone(?string $phone, array $country)
     {
         $code = WC()->countries->get_country_calling_code( $country['alpha2'] );
-
         return preg_replace('/^(?:\+?'. (int) $code.'|0)?/',$code, $phone);
     }
 }
