@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'oderopay/woocommerce',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => NULL,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => 'ad9e65c1e0bcf4109789d3382674394553bd2292',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -56,9 +56,9 @@
             'dev_requirement' => false,
         ),
         'oderopay/woocommerce' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => NULL,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => 'ad9e65c1e0bcf4109789d3382674394553bd2292',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

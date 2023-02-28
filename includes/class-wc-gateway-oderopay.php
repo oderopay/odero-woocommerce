@@ -341,9 +341,8 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
         /** @var WC_Order $order */
         $order         = wc_get_order( $order_id );
 
-
         //set billing address
-        $country = (new League\ISO3166\ISO3166)->alpha2($order->get_billing_country() ?? $this->get_default_country());
+        $country = (new League\ISO3166\ISO3166)->alpha2($order->get_billing_country() ?: $this->get_default_country());
         $billingAddress = new \Oderopay\Model\Address\BillingAddress();
         $billingAddress
             ->setAddress(sprintf('%s %s', $order->get_billing_address_1(), $order->get_billing_address_2()))
@@ -351,13 +350,13 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
             ->setCountry($country['alpha3']);
 
         //set shipping address
-        $country = (new League\ISO3166\ISO3166)->alpha2($order->get_shipping_country() ?? $this->get_default_country());
+        $country = (new League\ISO3166\ISO3166)->alpha2($order->get_shipping_country() ?: $this->get_default_country());
         $deliveryAddress = new \Oderopay\Model\Address\DeliveryAddress();
         $deliveryAddress
             ->setAddress(sprintf('%s %s', $order->get_shipping_address_1(), $order->get_shipping_address_2()))
-            ->setCity($order->get_shipping_city())
+            ->setCity($order->get_shipping_city() ?: $order->get_billing_city())
             ->setCountry($country['alpha3'])
-            ->setDeliveryType($order->get_shipping_method());
+            ->setDeliveryType($order->get_shipping_method() ?: "no-shipping");
 
         $phone = $order->get_billing_phone() ?? $order->get_shipping_phone();
         $phoneNumber = $this->add_country_code_to_phone($phone, $country);
@@ -403,6 +402,19 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
             $products[] = $shippingItem;
         }
 
+        //add taxes
+        foreach ($order->get_tax_totals() as $tax) {
+            $taxImage = WP_PLUGIN_URL . '/' . plugin_basename( dirname( dirname( __FILE__ ) ) ) . '/assets/images/tax.png';
+            $taxItem = new \Oderopay\Model\Payment\BasketItem();
+            $taxItem
+                ->setExtId($tax->id)
+                ->setImageUrl($taxImage)
+                ->setName($tax->label)
+                ->setPrice($tax->amount)
+                ->setQuantity(1);
+            $products[] = $taxItem;
+        }
+
         foreach( $order->get_coupon_codes() as $coupon_code ) {
             $coupon = new WC_Coupon($coupon_code);
 
@@ -439,7 +451,7 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 
         // Mark as on-hold (we're awaiting the cheque)
         $order->update_status($this->get_option('status_on_process'), __( 'Awaiting cheque payment', 'woocommerce' ));
-        $this->log_order_details($order);
+        $this->log(json_encode($paymentRequest->toArray()), WC_Log_Levels::INFO);
 
         if($payment->isSuccess()){
             //save the odero payment id
@@ -448,12 +460,8 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
             //set odero payment id for future use
             update_post_meta( $order->get_id(), self::ODERO_PAYMENT_KEY, $payment->data['paymentId'] );
 
-            // Remove cart
-            //$woocommerce->cart->empty_cart();
-
             //log the order
             $this->log_order_details($order);
-            $this->log(json_encode($payment));
 
             return  array(
                 'result' => 'success',
@@ -463,8 +471,9 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
             wc_add_notice(  $payment->getMessage(), 'error' );
         }
 
+        $this->log(json_encode($payment->toArray()), WC_Log_Levels::INFO);
 
-	}
+    }
 
 	/**
 	 * Receipt page.
@@ -550,7 +559,7 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 		. PHP_EOL . 'currency:   ' . $order->get_currency()
 		. PHP_EOL . 'key:        ' . $order->get_order_key()
 		. PHP_EOL . 'odero payment id : ' . $order->get_meta(self::ODERO_PAYMENT_KEY)
-		. "";
+		. "##############################";
 
 		$this->log( $details );
 	}
@@ -621,7 +630,7 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 			if ( empty( $this->logger ) ) {
 				$this->logger = new WC_Logger();
 			}
-			$this->logger->add( 'oderopay', $message );
+			$this->logger->add( 'oderopay', $message, $level );
 		}
 	}
 
@@ -712,7 +721,6 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
      */
     public function handle_order_number_custom_query_var( $query, $query_vars ) {
 
-        var_dump($query_vars); exit();
         if ( ! empty( $query_vars[self::ODERO_PAYMENT_KEY] ) ) {
             $query['meta_query'][] = array(
                 'key' => self::ODERO_PAYMENT_KEY,
@@ -736,7 +744,7 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 
     private function add_country_code_to_phone(?string $phone, array $country)
     {
-        $code = WC()->countries->get_country_calling_code( $country['alpha2'] );
+        $code = WC()->countries->get_country_calling_code( $country['alpha2'] ?? "RO" );
         return preg_replace('/^(?:\+?'. (int) $code.'|0)?/',$code, $phone);
     }
 }
