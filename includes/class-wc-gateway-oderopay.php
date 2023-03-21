@@ -116,7 +116,7 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
         $merchantToken  = !$this->sandbox ? $this->merchant_token : $this->merchant_token_sandbox;
 
         //Configure SDK
-        $config = new OderoConfig(get_bloginfo( 'name' ), $merchantId, $merchantToken, $this->get_option( 'sandbox') ? OderoConfig::ENV_STG : OderoConfig::ENV_PROD);
+        $config = new OderoConfig(get_bloginfo( 'name' ), $merchantId, $merchantToken, $this->sandbox  ? OderoConfig::ENV_STG : OderoConfig::ENV_PROD);
         $odero = new \Oderopay\OderoClient($config);
 
         $this->odero = $odero;
