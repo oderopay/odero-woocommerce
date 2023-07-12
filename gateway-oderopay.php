@@ -4,7 +4,7 @@
  * Description: Receive payments in RON and EUR
  * Author: OderoPay Team
  * Author URI: http://github.com/oderopay
- * Version: 1.0.6
+ * Version: 1.0.7
  * Requires at least: 5.6
  * Tested up to: 6.1
  * WC tested up to: 7.1
