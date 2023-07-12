@@ -345,7 +345,10 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
         $country = (new League\ISO3166\ISO3166)->alpha2($order->get_billing_country() ?: $this->get_default_country());
         $billingAddress = new \Oderopay\Model\Address\BillingAddress();
         $billingAddress
-            ->setAddress(sprintf('%s %s', $order->get_billing_address_1(), $order->get_billing_address_2()))
+            ->setAddress(sprintf('%s %s',
+                $order->get_billing_address_1() ?? $order->get_shipping_address_1(),
+                $order->get_billing_address_2() ?? $order->get_shipping_address_2()
+            ))
             ->setCity($order->get_billing_city())
             ->setCountry($country['alpha3']);
 
@@ -353,7 +356,10 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
         $country = (new League\ISO3166\ISO3166)->alpha2($order->get_shipping_country() ?: $this->get_default_country());
         $deliveryAddress = new \Oderopay\Model\Address\DeliveryAddress();
         $deliveryAddress
-            ->setAddress(sprintf('%s %s', $order->get_shipping_address_1(), $order->get_shipping_address_2()))
+            ->setAddress(sprintf('%s %s',
+                $order->get_shipping_address_1() ?? $order->get_billing_address_1(),
+                $order->get_shipping_address_2() ?? $order->get_billing_address_2()
+            ))
             ->setCity($order->get_shipping_city() ?: $order->get_billing_city())
             ->setCountry($country['alpha3'])
             ->setDeliveryType($order->get_shipping_method() ?: "no-shipping");

@@ -29,6 +29,9 @@ For help, setting up and configuring, please refer to our [user guide](https://d
 If you get stuck, you can ask for help in the Plugin Forum.
 
 ### Changelog
+= 1.0.6 - 2023-02-14
+Fix for empty Billing and Shipping address
+
 = 1.0.1 - 2023-02-14
 Fix for IPN webhook
 
