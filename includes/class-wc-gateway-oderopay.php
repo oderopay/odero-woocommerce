@@ -494,16 +494,16 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 
     public function webhook()
     {
-        $request = $_REQUEST;
-
+        $request =  $_REQUEST;
         if(empty($request['secret_key']) || $request['secret_key'] !== $this->secret_key){
-            // LOG THE REQUEST AS ATTACK
-            $this->log(json_encode($request), WC_Log_Levels::CRITICAL);
+            // THE REQUEST ATTACK
+            $this->log("CALLBACK ATTACK!  " . json_encode($request), WC_Log_Levels::CRITICAL);
             return;
         }
 
-        $payload = @file_get_contents('php://input'); // or $_REQUEST
-        $message = $this->odero->webhooks->handle(json_decode($payload, true));
+        $request = json_decode(file_get_contents('php://input'), true);
+        $this->log("RECEIVED PAYLOAD " . json_encode($request), WC_Log_Levels::NOTICE);
+        $message = $this->odero->webhooks->handle($request);
 
         switch (true) {
             case $message instanceof \Oderopay\Model\Webhook\Payment:
@@ -552,7 +552,7 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 	/**
 	 * Handle logging the order details.
 	 */
-	public function log_order_details( WC_Order $order  )
+	public function log_order_details( WC_Order $order, $level = WC_Log_Levels::NOTICE )
     {
 		$customer_id = $order->get_user_id();
 
@@ -567,7 +567,7 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 		. PHP_EOL . 'odero payment id : ' . $order->get_meta(self::ODERO_PAYMENT_KEY)
 		. "##############################";
 
-		$this->log( $details );
+		$this->log( $details, $level );
 	}
 
 	/**
