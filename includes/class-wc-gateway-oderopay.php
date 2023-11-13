@@ -97,6 +97,7 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 
 		// Setup default merchant data.
 		$this->sandbox                  = 'yes' === $this->get_option( 'sandbox' );
+		$this->merchant_name            = $this->get_option( 'merchant_name' );
 		$this->merchant_id              = $this->get_option( 'merchant_id' );
 		$this->merchant_token           = $this->get_option( 'merchant_token' );
 		$this->merchant_id_sandbox      = $this->get_option( 'merchant_id_sandbox' );
@@ -116,7 +117,7 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
         $merchantToken  = !$this->sandbox ? $this->merchant_token : $this->merchant_token_sandbox;
 
         //Configure SDK
-        $config = new OderoConfig(get_bloginfo( 'name' ), $merchantId, $merchantToken, $this->sandbox  ? OderoConfig::ENV_STG : OderoConfig::ENV_PROD);
+        $config = new OderoConfig($this->merchant_name ?? get_bloginfo( 'name' ), $merchantId, $merchantToken, $this->sandbox  ? OderoConfig::ENV_STG : OderoConfig::ENV_PROD);
         $odero = new \Oderopay\OderoClient($config);
 
         $this->odero = $odero;
@@ -144,21 +145,28 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 				'desc_tip'    => true,
 			),
             'title' => array(
-                'title'       => __( 'Title', 'woocommerce-gateway-payfast' ),
+                'title'       => __( 'Title', 'woocommerce-gateway-oderopay' ),
                 'type'        => 'text',
-                'description' => __( 'This controls the title which the user sees during checkout.', 'woocommerce-gateway-payfast' ),
-                'default'     => __( 'OderoPay', 'woocommerce-gateway-payfast' ),
+                'description' => __( 'This controls the title which the user sees during checkout.', 'woocommerce-gateway-oderopay' ),
+                'default'     => __( 'OderoPay', 'woocommerce-gateway-oderopay' ),
                 'desc_tip'    => true,
             ),
             'description' => array(
-                'title'       => __( 'Description', 'woocommerce-gateway-payfast' ),
+                'title'       => __( 'Description', 'woocommerce-gateway-oderopay' ),
                 'type'        => 'text',
-                'description' => __( 'This controls the description which the user sees during checkout.', 'woocommerce-gateway-payfast' ),
+                'description' => __( 'This controls the description which the user sees during checkout.', 'woocommerce-gateway-oderopay' ),
                 'default'     => '',
                 'desc_tip'    => true,
             ),
 
-			'merchant_id' => array(
+			'merchant_name' => array(
+				'title'       => __( 'Merchant Name', 'woocommerce-gateway-oderopay' ),
+				'type'        => 'text',
+				'description' => __( 'This is the merchant name, mostly your default store name.', 'woocommerce-gateway-oderopay' ),
+				'default'     => get_bloginfo( 'name' ),
+			),
+
+            'merchant_id' => array(
 				'title'       => __( 'Merchant ID', 'woocommerce-gateway-oderopay' ),
 				'type'        => 'text',
 				'description' => __( 'This is the merchant ID, received from OderoPay.', 'woocommerce-gateway-oderopay' ),
