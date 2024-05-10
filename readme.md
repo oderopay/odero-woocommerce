@@ -29,13 +29,20 @@ For help, setting up and configuring, please refer to our [user guide](https://d
 If you get stuck, you can ask for help in the Plugin Forum.
 
 ### Changelog
-= 1.0.6 - 2023-02-14
+
+1.0.9 - 2023-02-14
+Fix for the products dont have images
+
+1.0.8 - 2023-02-14
+Improve logging
+
+1.0.6 - 2023-02-14
 Fix for empty Billing and Shipping address
 
-= 1.0.1 - 2023-02-14
+1.0.1 - 2023-02-14
 Fix for IPN webhook
 
-= 1.0.0 - 2023-02-13
+1.0.0 - 2023-02-13
 Initial version release
 
 

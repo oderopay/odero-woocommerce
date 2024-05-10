@@ -109,10 +109,10 @@ class Merchant extends AbstractRequest
     }
 
     /**
-     * @param BasketItem $products
+     * @param BasketItem[] $products
      * @return Merchant
      */
-    public function setProducts($products)
+    public function setProducts(array $products)
     {
         $this->products = $products;
 

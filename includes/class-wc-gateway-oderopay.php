@@ -394,10 +394,13 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
             $product = new \Oderopay\Model\Payment\BasketItem();
             $product
                 ->setExtId( $item->get_product_id())
-                ->setImageUrl( $image ??  null)
                 ->setName($wooProduct->get_name())
                 ->setPrice($wooProduct->get_price())
                 ->setQuantity($item->get_quantity());
+
+            if(!empty($image)){
+                $product->setImageUrl($image);
+			}
 
             $products[] = $product;
 
