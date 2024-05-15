@@ -1,5 +1,10 @@
 <?php
 
+if (version_compare(phpversion(), '7.1', '>=')) {
+	ini_set( 'precision', 17 );
+	ini_set( 'serialize_precision', -1 );
+}
+
 use Oderopay\OderoConfig;
 
 /**
