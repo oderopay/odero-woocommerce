@@ -404,6 +404,7 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
             $product
                 ->setExtId( $item->get_product_id())
                 ->setName($wooProduct->get_name())
+                ->setTotal($price * $item->get_quantity())
                 ->setPrice($price)
                 ->setQuantity($item->get_quantity());
 

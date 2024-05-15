@@ -396,16 +396,16 @@
         },
         {
             "name": "oderopay/odero-php",
-            "version": "v1.0.8",
+            "version": "v1.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oderopay/odero-php.git",
-                "reference": "c7a6411a22f31605b8c1e05b7971d86531a603d5"
+                "reference": "4151590525be2c88126ce045d75b38ec8a39082f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oderopay/odero-php/zipball/c7a6411a22f31605b8c1e05b7971d86531a603d5",
-                "reference": "c7a6411a22f31605b8c1e05b7971d86531a603d5",
+                "url": "https://api.github.com/repos/oderopay/odero-php/zipball/4151590525be2c88126ce045d75b38ec8a39082f",
+                "reference": "4151590525be2c88126ce045d75b38ec8a39082f",
                 "shasum": ""
             },
             "require": {
@@ -442,9 +442,9 @@
             "description": "Oderopay PHP Sdk",
             "support": {
                 "issues": "https://github.com/oderopay/odero-php/issues",
-                "source": "https://github.com/oderopay/odero-php/tree/v1.0.8"
+                "source": "https://github.com/oderopay/odero-php/tree/v1.0.9"
             },
-            "time": "2023-02-13T13:18:24+00:00"
+            "time": "2024-05-15T13:56:03+00:00"
         },
         {
             "name": "psr/http-client",
