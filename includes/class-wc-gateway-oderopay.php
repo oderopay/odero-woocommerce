@@ -473,7 +473,7 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 
         $paymentRequest = new \Oderopay\Model\Payment\Payment();
         $paymentRequest
-            ->setAmount($cartTotal)
+            ->setAmount(number_format($cartTotal, 2, '.', ''))
             ->setCurrency(get_woocommerce_currency())
             ->setExtOrderId($order->get_id())
             ->setExtOrderUrl($returnUrl)
