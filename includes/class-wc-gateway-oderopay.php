@@ -384,18 +384,22 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 
         $products = [];
 
+        $cartTotal = 0;
         foreach ( $order->get_items() as $item_id => $item ) {
 
             /** @var WC_Product $wooProduct */
             $wooProduct = $item->get_product();
             $image = get_the_post_thumbnail_url($wooProduct->get_id());
 
+            $price = (float) number_format($wooProduct->get_price(), 2, '.', '');
+            $cartTotal += $price * $item->get_quantity();
+
             /** @var  WC_Order_Item $item */
             $product = new \Oderopay\Model\Payment\BasketItem();
             $product
                 ->setExtId( $item->get_product_id())
                 ->setName($wooProduct->get_name())
-                ->setPrice($wooProduct->get_price())
+                ->setPrice($price)
                 ->setQuantity($item->get_quantity());
 
             if(!empty($image)){
@@ -410,11 +414,15 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
         if($order->get_shipping_total() > 0){
             $cargoImage = WP_PLUGIN_URL . '/' . plugin_basename( dirname( dirname( __FILE__ ) ) ) . '/assets/images/cargo.webp';
             $shippingItem = new \Oderopay\Model\Payment\BasketItem();
+
+			$price = (float) number_format($order->get_shipping_total(), 2, '.', '');
+			$cartTotal += $price;
+
             $shippingItem
-                ->setExtId( $order->get_shipping_method())
+                ->setExtId($order->get_shipping_method())
                 ->setImageUrl( $cargoImage)
                 ->setName($order->get_shipping_method())
-                ->setPrice($order->get_shipping_total())
+                ->setPrice($price)
                 ->setQuantity(1);
             $products[] = $shippingItem;
         }
@@ -423,11 +431,15 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
         foreach ($order->get_tax_totals() as $tax) {
             $taxImage = WP_PLUGIN_URL . '/' . plugin_basename( dirname( dirname( __FILE__ ) ) ) . '/assets/images/tax.png';
             $taxItem = new \Oderopay\Model\Payment\BasketItem();
+
+			$price = (float) number_format($tax->amount, 2, '.', '');
+			$cartTotal += $price;
+
             $taxItem
                 ->setExtId($tax->id)
                 ->setImageUrl($taxImage)
                 ->setName($tax->label)
-                ->setPrice($tax->amount)
+                ->setPrice($price)
                 ->setQuantity(1);
             $products[] = $taxItem;
         }
@@ -439,11 +451,15 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 
             $couponImage = WP_PLUGIN_URL . '/' . plugin_basename( dirname( dirname( __FILE__ ) ) ) . '/assets/images/voucher.png';
             $couponItem = new \Oderopay\Model\Payment\BasketItem();
+
+			$price = (float) number_format($amount, 2, '.', '');
+			$cartTotal += $price;
+
             $couponItem
                 ->setExtId($coupon->get_id())
                 ->setImageUrl($couponImage)
                 ->setName($coupon->get_code())
-                ->setPrice($amount)
+                ->setPrice($price)
                 ->setQuantity(-1);
             $products[] = $couponItem;
         }
@@ -452,7 +468,7 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 
         $paymentRequest = new \Oderopay\Model\Payment\Payment();
         $paymentRequest
-            ->setAmount($order->get_total())
+            ->setAmount($cartTotal)
             ->setCurrency(get_woocommerce_currency())
             ->setExtOrderId($order->get_id())
             ->setExtOrderUrl($returnUrl)
@@ -464,11 +480,13 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
             ->setProducts($products)
         ;
 
+		$payload = $paymentRequest->toArray();
+		$this->log(json_encode($payload), WC_Log_Levels::INFO);
+
         $payment = $this->odero->payments->create($paymentRequest); //PaymentIntentResponse
 
         // Mark as on-hold (we're awaiting the cheque)
         $order->update_status($this->get_option('status_on_process'), __( 'Awaiting cheque payment', 'woocommerce' ));
-        $this->log(json_encode($paymentRequest->toArray()), WC_Log_Levels::INFO);
 
         if($payment->isSuccess()){
             //save the odero payment id

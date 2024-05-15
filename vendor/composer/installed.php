@@ -3,7 +3,7 @@
         'name' => 'oderopay/woocommerce',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'ad9e65c1e0bcf4109789d3382674394553bd2292',
+        'reference' => '800bb3f62383ef9010e720b023907af5af83fc90',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -58,7 +58,7 @@
         'oderopay/woocommerce' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'ad9e65c1e0bcf4109789d3382674394553bd2292',
+            'reference' => '800bb3f62383ef9010e720b023907af5af83fc90',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
