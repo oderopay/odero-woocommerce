@@ -486,7 +486,7 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
         ;
 
 		$payload = $paymentRequest->toArray();
-		$this->log(json_encode($payload, JSON_NUMERIC_CHECK), WC_Log_Levels::INFO);
+		$this->log(json_encode($payload), WC_Log_Levels::INFO);
 
         $payment = $this->odero->payments->create($paymentRequest); //PaymentIntentResponse
 

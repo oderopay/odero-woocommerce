@@ -27,8 +27,7 @@ $product1
     ->setExtId('123')
     ->setImageUrl('https://site.com/image/product1.jpg')
     ->setName('Product Name')
-    ->setPrice(1)
-    ->setTotal(1)
+    ->setPrice(99.99)
     ->setQuantity(1);
 
 $products[] = $product1;
@@ -38,8 +37,7 @@ $product2
     ->setExtId('123')
     ->setImageUrl('https://site.com/image/product1.jpg')
     ->setName('Product Name')
-    ->setPrice(1)
-    ->setTotal(1)
+    ->setPrice(99.99)
     ->setQuantity(1);
 
 $products[] = $product2;
@@ -53,7 +51,6 @@ $paymentRequest
     ->setMerchantId('{merchant-id}')
     ->setCustomer($customer)
     ->setProducts($products)
-    ->setAmount(2)
     ->setCardToken('1065f952bb77090d7929f933748a31a8c51a707d133d09e9224dd3ca30c78f4d') //add card token
     ->setSuccessUrl('https://tokenco.shop/?success=true&orderId=324234&test=test')
     ->setFailUrl('https://tokenco.shop/?success=false&orderId=324234&test=test')

@@ -7,7 +7,6 @@ use Oderopay\Http\Response\PaymentResponse;
 use Oderopay\Model\Payment\BasketItem;
 use Oderopay\Model\Payment\Merchant;
 use Oderopay\Model\Payment\Payment;
-use Oderopay\Model\Payment\PaymentLink;
 use Oderopay\Service\BaseService;
 
 class PaymentService extends BaseService
@@ -43,10 +42,6 @@ class PaymentService extends BaseService
         $uri = 'api/payments/one-time';
         if($payment->getCardToken()){
             $uri = 'api/payments/stored-card';
-        }
-
-        if($payment instanceof PaymentLink){
-            $uri = 'api/payments/link';
         }
 
         $payload = $payment->toArray(); unset($payload['products']);
