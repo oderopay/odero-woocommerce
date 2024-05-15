@@ -402,17 +402,17 @@
         },
         {
             "name": "oderopay/odero-php",
-            "version": "v1.0.8",
-            "version_normalized": "1.0.8.0",
+            "version": "v1.0.9",
+            "version_normalized": "1.0.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oderopay/odero-php.git",
-                "reference": "c7a6411a22f31605b8c1e05b7971d86531a603d5"
+                "reference": "392309a44c7522e10ad40b26f3a79c5abfd555c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oderopay/odero-php/zipball/c7a6411a22f31605b8c1e05b7971d86531a603d5",
-                "reference": "c7a6411a22f31605b8c1e05b7971d86531a603d5",
+                "url": "https://api.github.com/repos/oderopay/odero-php/zipball/392309a44c7522e10ad40b26f3a79c5abfd555c1",
+                "reference": "392309a44c7522e10ad40b26f3a79c5abfd555c1",
                 "shasum": ""
             },
             "require": {
@@ -427,7 +427,7 @@
                 "phpspec/prophecy": "^1.15",
                 "symfony/var-dumper": "^5.4"
             },
-            "time": "2023-02-13T13:18:24+00:00",
+            "time": "2024-05-15T09:02:08+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -451,7 +451,7 @@
             "description": "Oderopay PHP Sdk",
             "support": {
                 "issues": "https://github.com/oderopay/odero-php/issues",
-                "source": "https://github.com/oderopay/odero-php/tree/v1.0.8"
+                "source": "https://github.com/oderopay/odero-php/tree/v1.0.9"
             },
             "install-path": "../oderopay/odero-php"
         },

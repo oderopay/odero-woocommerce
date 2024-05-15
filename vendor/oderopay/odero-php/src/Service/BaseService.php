@@ -5,6 +5,7 @@ namespace Oderopay\Service;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\ServerException;
 use Oderopay\Http\HttpClient;
 use Oderopay\Http\HttpResponse;
 use Oderopay\OderoClient;
@@ -34,7 +35,7 @@ class BaseService
      */
     public function generateMerchantSignature(array $body, $merchantId, $merchantToken): string
     {
-        $merchantSignatureHeader = hash("sha256", $merchantId . json_encode($body) . $merchantToken);
+        $merchantSignatureHeader = hash("sha256", $merchantId . json_encode($body, JSON_NUMERIC_CHECK) . $merchantToken);
         return sprintf('%s|%s', $merchantId, $merchantSignatureHeader);
     }
 
