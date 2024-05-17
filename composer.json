@@ -10,7 +10,7 @@
     ],
     "require": {
         "php": "^7.2.5 || ^8.0",
-        "oderopay/odero-php": "^1.0",
+        "oderopay/odero-php": "^1.1",
         "symfony/deprecation-contracts": "^2.5",
         "league/iso3166": "^4.2"
     },
