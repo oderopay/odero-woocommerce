@@ -27,20 +27,19 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class AsyncResponse implements ResponseInterface, StreamableInterface
+final class AsyncResponse implements ResponseInterface, StreamableInterface
 {
     use CommonResponseTrait;
 
     private const FIRST_CHUNK_YIELDED = 1;
     private const LAST_CHUNK_YIELDED = 2;
 
-    private ?HttpClientInterface $client;
-    private ResponseInterface $response;
-    private array $info = ['canceled' => false];
-    /** @var callable|null */
+    private $client;
+    private $response;
+    private $info = ['canceled' => false];
     private $passthru;
-    private ?\Iterator $stream = null;
-    private ?int $yieldedState = null;
+    private $stream;
+    private $yieldedState;
 
     /**
      * @param ?callable(ChunkInterface, AsyncContext): ?\Iterator $passthru
@@ -116,7 +115,7 @@ class AsyncResponse implements ResponseInterface, StreamableInterface
         return $headers;
     }
 
-    public function getInfo(?string $type = null): mixed
+    public function getInfo(?string $type = null)
     {
         if (null !== $type) {
             return $this->info[$type] ?? $this->response->getInfo($type);
@@ -125,9 +124,6 @@ class AsyncResponse implements ResponseInterface, StreamableInterface
         return $this->info + $this->response->getInfo();
     }
 
-    /**
-     * @return resource
-     */
     public function toStream(bool $throw = true)
     {
         if ($throw) {
@@ -170,7 +166,7 @@ class AsyncResponse implements ResponseInterface, StreamableInterface
             }
 
             $this->passthru = null;
-        } catch (ExceptionInterface) {
+        } catch (ExceptionInterface $e) {
             // ignore any errors when canceling
         }
     }
@@ -195,7 +191,7 @@ class AsyncResponse implements ResponseInterface, StreamableInterface
                 foreach (self::passthru($this->client, $this, new LastChunk()) as $chunk) {
                     // no-op
                 }
-            } catch (ExceptionInterface) {
+            } catch (ExceptionInterface $e) {
                 // ignore any errors when destructing
             }
         }

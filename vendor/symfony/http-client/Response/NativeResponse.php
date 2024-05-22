@@ -29,22 +29,14 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
     use CommonResponseTrait;
     use TransportResponseTrait;
 
-    /**
-     * @var resource
-     */
     private $context;
-    private string $url;
-    private \Closure $resolver;
-    private ?\Closure $onProgress;
-    private ?int $remaining = null;
-
-    /**
-     * @var resource|null
-     */
+    private $url;
+    private $resolver;
+    private $onProgress;
+    private $remaining;
     private $buffer;
-
-    private NativeClientState $multi;
-    private float $pauseExpiry = 0.0;
+    private $multi;
+    private $pauseExpiry = 0;
 
     /**
      * @internal
@@ -58,24 +50,25 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
         $this->logger = $logger;
         $this->timeout = $options['timeout'];
         $this->info = &$info;
-        $this->resolver = $resolver(...);
-        $this->onProgress = $onProgress ? $onProgress(...) : null;
+        $this->resolver = $resolver;
+        $this->onProgress = $onProgress;
         $this->inflate = !isset($options['normalized_headers']['accept-encoding']);
         $this->shouldBuffer = $options['buffer'] ?? true;
 
         // Temporary resource to dechunk the response stream
         $this->buffer = fopen('php://temp', 'w+');
 
-        $info['original_url'] = implode('', $info['url']);
         $info['user_data'] = $options['user_data'];
         $info['max_duration'] = $options['max_duration'];
         ++$multi->responseCount;
 
-        $this->initializer = static fn (self $response) => null === $response->remaining;
+        $this->initializer = static function (self $response) {
+            return null === $response->remaining;
+        };
 
         $pauseExpiry = &$this->pauseExpiry;
         $info['pause_handler'] = static function (float $duration) use (&$pauseExpiry) {
-            $pauseExpiry = 0 < $duration ? hrtime(true) / 1E9 + $duration : 0;
+            $pauseExpiry = 0 < $duration ? microtime(true) + $duration : 0;
         };
 
         $this->canary = new Canary(static function () use ($multi, $id) {
@@ -86,7 +79,10 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
         });
     }
 
-    public function getInfo(?string $type = null): mixed
+    /**
+     * {@inheritdoc}
+     */
+    public function getInfo(?string $type = null)
     {
         if (!$info = $this->finalInfo) {
             $info = $this->info;
@@ -123,7 +119,7 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
                 throw new TransportException($msg);
             }
 
-            $this->logger?->info(sprintf('%s for "%s".', $msg, $url ?? $this->url));
+            $this->logger && $this->logger->info(sprintf('%s for "%s".', $msg, $url ?? $this->url));
         });
 
         try {
@@ -159,7 +155,7 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
                     break;
                 }
 
-                $this->logger?->info(sprintf('Redirecting: "%s %s"', $this->info['http_code'], $url ?? $this->url));
+                $this->logger && $this->logger->info(sprintf('Redirecting: "%s %s"', $this->info['http_code'], $url ?? $this->url));
             }
         } catch (\Throwable $e) {
             $this->close();
@@ -177,7 +173,7 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
         }
 
         stream_set_blocking($h, false);
-        unset($this->context, $this->resolver);
+        $this->context = $this->resolver = null;
 
         // Create dechunk buffers
         if (isset($this->headers['content-length'])) {
@@ -204,12 +200,18 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
         $this->multi->hosts[$host] = 1 + ($this->multi->hosts[$host] ?? 0);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     private function close(): void
     {
         $this->canary->cancel();
         $this->handle = $this->buffer = $this->inflate = $this->onProgress = null;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     private static function schedule(self $response, array &$runningResponses): void
     {
         if (!isset($runningResponses[$i = $response->multi->id])) {
@@ -226,13 +228,15 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @param NativeClientState $multi
      */
     private static function perform(ClientState $multi, ?array &$responses = null): void
     {
         foreach ($multi->openHandles as $i => [$pauseExpiry, $h, $buffer, $onProgress]) {
             if ($pauseExpiry) {
-                if (hrtime(true) / 1E9 < $pauseExpiry) {
+                if (microtime(true) < $pauseExpiry) {
                     continue;
                 }
 
@@ -321,7 +325,7 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
                 continue;
             }
 
-            if ($response->pauseExpiry && hrtime(true) / 1E9 < $response->pauseExpiry) {
+            if ($response->pauseExpiry && microtime(true) < $response->pauseExpiry) {
                 // Create empty open handles to tell we still have pending requests
                 $multi->openHandles[$i] = [\INF, null, null, null];
             } elseif ($maxHosts && $maxHosts > ($multi->hosts[parse_url($response->url, \PHP_URL_HOST)] ?? 0)) {
@@ -335,6 +339,8 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @param NativeClientState $multi
      */
     private static function select(ClientState $multi, float $timeout): int
@@ -351,7 +357,7 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
                 continue;
             }
 
-            if ($pauseExpiry && ($now ??= hrtime(true) / 1E9) < $pauseExpiry) {
+            if ($pauseExpiry && ($now ?? $now = microtime(true)) < $pauseExpiry) {
                 $timeout = min($timeout, $pauseExpiry - $now);
                 continue;
             }

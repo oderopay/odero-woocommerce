@@ -4,18 +4,18 @@
  * Description: Receive payments in RON and EUR
  * Author: OderoPay Team
  * Author URI: http://github.com/oderopay
- * Version: 1.2.0
+ * Version: 1.2.1
  * Requires at least: 6.0
  * Tested up to: 6.5.3
  * WC tested up to: 8.8.3
  * WC requires at least: 6.0
- * Requires PHP: 8.1+
+ * Requires PHP: 7.2+
  */
 use Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry;
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WC_GATEWAY_ODEROPAY_VERSION', '1.0.0' );
+define( 'WC_GATEWAY_ODEROPAY_VERSION', '1.2.1' );
 define( 'WC_GATEWAY_ODEROPAY_URL', untrailingslashit( plugins_url( basename( plugin_dir_path( __FILE__ ) ), basename( __FILE__ ) ) ) );
 define( 'WC_GATEWAY_ODEROPAY_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 
