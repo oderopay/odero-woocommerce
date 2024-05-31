@@ -34,6 +34,7 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 
     private $available_currencies;
     private $merchant_id;
+    private $merchant_name;
     private $merchant_token;
 
     /**
@@ -69,6 +70,8 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
      * @var bool
      */
     private $sandbox;
+
+    private $debug_email = null;
 
     /**
 	 * Constructor
@@ -397,15 +400,16 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
             $image = get_the_post_thumbnail_url($wooProduct->get_id());
 
             $productPrice = wc_get_price_excluding_tax( $wooProduct );
-            $price = (float) number_format($productPrice, 2, '.', '');
+            $price =  number_format($productPrice, 2, '.', '');
 
+            $productTotal = $price * $item->get_quantity();
             /** @var  WC_Order_Item $item */
             $product = new \Oderopay\Model\Payment\BasketItem();
             $product
                 ->setExtId( $item->get_product_id())
                 ->setName($wooProduct->get_name())
                 ->setPrice($price)
-                ->setTotal($price)
+                ->setTotal($productTotal)
                 ->setQuantity($item->get_quantity());
 
 			$cartTotal += $product->getTotal();
@@ -423,7 +427,7 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
             $cargoImage = WP_PLUGIN_URL . '/' . plugin_basename( dirname( dirname( __FILE__ ) ) ) . '/assets/images/cargo.webp';
             $shippingItem = new \Oderopay\Model\Payment\BasketItem();
 
-			$price = (float) number_format($order->get_shipping_total(), 2, '.', '');
+			$price = number_format($order->get_shipping_total(), 2, '.', '');
 
             $shippingItem
                 ->setExtId($order->get_shipping_method())
@@ -442,7 +446,7 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
             $taxImage = WP_PLUGIN_URL . '/' . plugin_basename( dirname( dirname( __FILE__ ) ) ) . '/assets/images/tax.png';
             $taxItem = new \Oderopay\Model\Payment\BasketItem();
 
-			$price = (float) number_format($tax->amount, 2, '.', '');
+			$price = number_format($tax->amount, 2, '.', '');
 
             $taxItem
                 ->setExtId($tax->id)
@@ -462,7 +466,7 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
             $couponImage = WP_PLUGIN_URL . '/' . plugin_basename( dirname( dirname( __FILE__ ) ) ) . '/assets/images/voucher.png';
             $couponItem = new \Oderopay\Model\Payment\BasketItem();
 
-			$price = (float) number_format($amount, 2, '.', '');
+			$price =  number_format($amount, 2, '.', '');
 
             $couponItem
                 ->setExtId($coupon->get_id())
@@ -479,7 +483,7 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 
         $paymentRequest = new \Oderopay\Model\Payment\Payment();
         $paymentRequest
-            ->setAmount(number_format($cartTotal, 2, '.', ''))
+            ->setAmount(floatval($cartTotal))
             ->setCurrency(get_woocommerce_currency())
             ->setExtOrderId($order->get_id())
             ->setExtOrderUrl($returnUrl)
