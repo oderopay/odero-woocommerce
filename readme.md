@@ -6,6 +6,14 @@ This is the official WooCommerce extension to receive payments using the OderoPa
 
 The OderoPay extension for WooCommerce enables you to accept payments including Subscriptions, Deposits & Pre-Orders via one of Romania’s most popular payment gateways.
 
+#### Important Notice:
+Woocommerce has a Rounding Bug issue (check more on issues [1](https://github.com/woocommerce/woocommerce/issues/34529)
+ and [2](https://github.com/woocommerce/woocommerce/issues/24184))
+
+Odero plugin doesnt round up after 2nd decimals. Example;
+Assume that cart total becomes `49.9000233`  after some division. 
+Woocommerce displays this amount as `49.91` yet, it is `49.90` for odero.
+
 ### Why choose OderoPay?
 
 OderoPay gives your customers more flexibility including putting down deposits, ordering ahead of time or paying on a weekly, monthly or annual basis.
@@ -29,6 +37,11 @@ For help, setting up and configuring, please refer to our [user guide](https://d
 If you get stuck, you can ask for help in the Plugin Forum.
 
 ### Changelog
+
+1.2.2 - 2024-05-31
+Fixing calculation with inc/exl taxes
+Fixing cart total with Shipping with Excluded Tax
+
 
 1.0.9 - 2023-02-14
 Fix for the products dont have images
