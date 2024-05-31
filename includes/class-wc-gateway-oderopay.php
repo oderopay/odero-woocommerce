@@ -479,11 +479,12 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 			$cartTotal += $couponItem->getTotal();
         }
 
-        $returnUrl = $this->get_return_url( $order );
+        $cartTotal  = sprintf("%.2f", $cartTotal);
 
+        $returnUrl = $this->get_return_url( $order );
         $paymentRequest = new \Oderopay\Model\Payment\Payment();
         $paymentRequest
-            ->setAmount(floatval($cartTotal))
+            ->setAmount($cartTotal)
             ->setCurrency(get_woocommerce_currency())
             ->setExtOrderId($order->get_id())
             ->setExtOrderUrl($returnUrl)
