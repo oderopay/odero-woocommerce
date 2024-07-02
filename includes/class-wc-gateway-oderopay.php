@@ -344,6 +344,19 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 		}
 	}
 
+	public function getCartSummary() {
+		$cartArr = WC()->cart->get_cart();
+		$i = 0;
+		$cartSummary = array();
+		foreach ($cartArr as $key => $value ) {
+			$cartSummary[$i]['name'] 				=  $value['data']->get_name();
+			$cartSummary[$i]['price'] 			=  $value['data']->get_price();
+			$cartSummary[$i]['quantity'] 			=  $value['quantity'];
+			$cartSummary[$i]['short_description'] =  substr($value['data']->get_short_description(), 0, 100);
+			$i++;
+		}
+		return json_encode($cartSummary);
+	}
 
 	/**
 	 * Process the payment and return the result.
@@ -458,26 +471,23 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 			$cartTotal += $taxItem->getTotal();
         }
 
-        foreach( $order->get_coupon_codes() as $coupon_code ) {
-            $coupon = new WC_Coupon($coupon_code);
 
-            $amount  = WC()->cart->get_coupon_discount_amount( $coupon->get_code(),true);
+        //add the order discount
+        $couponImage = WP_PLUGIN_URL . '/' . plugin_basename( dirname( dirname( __FILE__ ) ) ) . '/assets/images/voucher.png';
+        $couponItem = new \Oderopay\Model\Payment\BasketItem();
 
-            $couponImage = WP_PLUGIN_URL . '/' . plugin_basename( dirname( dirname( __FILE__ ) ) ) . '/assets/images/voucher.png';
-            $couponItem = new \Oderopay\Model\Payment\BasketItem();
+        $price =  number_format($order->get_discount_total(), 2, '.', '');
 
-			$price =  number_format($amount, 2, '.', '');
+        $couponItem
+            ->setExtId('DISCOUNT')
+            ->setImageUrl($couponImage)
+            ->setName('DISCOUNT')
+            ->setPrice($price)
+            ->setQuantity(-1);
+        $products[] = $couponItem;
 
-            $couponItem
-                ->setExtId($coupon->get_id())
-                ->setImageUrl($couponImage)
-                ->setName($coupon->get_code())
-                ->setPrice($price)
-                ->setQuantity(-1);
-            $products[] = $couponItem;
+        $cartTotal += $couponItem->getTotal();
 
-			$cartTotal += $couponItem->getTotal();
-        }
 
         $cartTotal  = sprintf("%.2f", $cartTotal);
 
