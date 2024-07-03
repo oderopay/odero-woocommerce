@@ -473,24 +473,23 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 
 
         //add the order discount
-        $couponImage = WP_PLUGIN_URL . '/' . plugin_basename( dirname( dirname( __FILE__ ) ) ) . '/assets/images/voucher.png';
-        $couponItem = new \Oderopay\Model\Payment\BasketItem();
+        $discountTotal =  number_format($order->get_discount_total(), 2, '.', '');
+        if($discountTotal > 0 ){
+			$couponImage = WP_PLUGIN_URL . '/' . plugin_basename( dirname( dirname( __FILE__ ) ) ) . '/assets/images/voucher.png';
+			$couponItem = new \Oderopay\Model\Payment\BasketItem();
 
-        $price =  number_format($order->get_discount_total(), 2, '.', '');
+			$couponItem
+				->setExtId('DISCOUNT')
+				->setImageUrl($couponImage)
+				->setName('DISCOUNT')
+				->setPrice($discountTotal)
+				->setQuantity(-1);
+			$products[] = $couponItem;
 
-        $couponItem
-            ->setExtId('DISCOUNT')
-            ->setImageUrl($couponImage)
-            ->setName('DISCOUNT')
-            ->setPrice($price)
-            ->setQuantity(-1);
-        $products[] = $couponItem;
-
-        $cartTotal += $couponItem->getTotal();
-
+			$cartTotal += $couponItem->getTotal();
+		}
 
         $cartTotal  = sprintf("%.2f", $cartTotal);
-
         $returnUrl = $this->get_return_url( $order );
         $paymentRequest = new \Oderopay\Model\Payment\Payment();
         $paymentRequest
