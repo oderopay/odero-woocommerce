@@ -4,10 +4,10 @@
  * Description: Receive payments in RON and EUR
  * Author: OderoPay Team
  * Author URI: http://github.com/oderopay
- * Version: 1.2.3
+ * Version: 1.2.4
  * Requires at least: 6.0
- * Tested up to: 6.5.3
- * WC tested up to: 8.8.3
+ * Tested up to: 6.6.0
+ * WC tested up to: 9.3.3
  * WC requires at least: 6.0
  * Requires PHP: 7.2+
  */
@@ -15,7 +15,7 @@ use Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry;
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WC_GATEWAY_ODEROPAY_VERSION', '1.2.1' );
+define( 'WC_GATEWAY_ODEROPAY_VERSION', '1.2.4' );
 define( 'WC_GATEWAY_ODEROPAY_URL', untrailingslashit( plugins_url( basename( plugin_dir_path( __FILE__ ) ), basename( __FILE__ ) ) ) );
 define( 'WC_GATEWAY_ODEROPAY_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 
@@ -30,7 +30,7 @@ function woocommerce_oderopay_init() {
 
 	require_once( plugin_basename( 'vendor/autoload.php' ) );
 	require_once( plugin_basename( 'includes/class-wc-gateway-oderopay.php' ) );
-	load_plugin_textdomain( 'woocommerce-gateway-oderopay', false, trailingslashit( dirname( plugin_basename( __FILE__ ) ) ) );
+	load_plugin_textdomain( 'wc-gateway-oderopay', false, trailingslashit( dirname( plugin_basename( __FILE__ ) ) ) );
 
 	add_filter( 'woocommerce_payment_gateways', 'woocommerce_oderopay_add_gateway' );
 }
@@ -47,8 +47,8 @@ function woocommerce_oderopay_plugin_links( $links ) {
 	);
 
 	$plugin_links = array(
-		'<a href="' . esc_url( $settings_url ) . '">' . __( 'Settings', 'woocommerce-gateway-oderopay' ) . '</a>',
-		'<a href="https://developer.pay.odero.ro/">' . __( 'Docs', 'woocommerce-gateway-oderopay' ) . '</a>',
+		'<a href="' . esc_url( $settings_url ) . '">' . __( 'Settings', 'wc-gateway-oderopay' ) . '</a>',
+		'<a href="https://developer.pay.odero.ro/">' . __( 'Docs', 'wc-gateway-oderopay' ) . '</a>',
 	);
 
 	return array_merge( $plugin_links, $links );

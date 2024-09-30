@@ -38,6 +38,9 @@ If you get stuck, you can ask for help in the Plugin Forum.
 
 ### Changelog
 
+1.2.4 - 2024-05-31
+Wordpress Plugin directory submission review
+
 1.2.2 - 2024-05-31
 Fixing calculation with inc/exl taxes
 Fixing cart total with Shipping with Excluded Tax
