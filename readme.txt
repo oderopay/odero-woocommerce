@@ -4,6 +4,8 @@ Stable tag: Version: 1.2.4
 Requires at least: 6.0
 Requires PHP: 7.2+
 Tested up to: 6.6
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 This is the official WooCommerce extension to receive payments using the OderoPay payments provider.
 

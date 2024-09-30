@@ -370,6 +370,8 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
         /** @var WC_Order $order */
         $order         = wc_get_order( $order_id );
 
+        $order->set_payment_method('oderopay');
+
         //set billing address
         $country = (new League\ISO3166\ISO3166)->alpha2($order->get_billing_country() ?: $this->get_default_country());
         $billingAddress = new \Oderopay\Model\Address\BillingAddress();
@@ -548,8 +550,8 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 
     public function webhook()
     {
-        $request =  filter_input_array(INPUT_REQUEST, $_REQUEST);
-        if(empty(esc_attr($request['secret_key'])) || esc_attr($request['secret_key']) !== $this->secret_key){
+		$request  = $_REQUEST;
+        if(empty(sanitize_text_field($request['secret_key'])) || sanitize_text_field($request['secret_key']) !== $this->secret_key){
             // THE REQUEST ATTACK
             $this->log("CALLBACK ATTACK!  " . json_encode($request), WC_Log_Levels::CRITICAL);
             return;
@@ -562,7 +564,8 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
         switch (true) {
             case $message instanceof \Oderopay\Model\Webhook\Payment:
                 /** @var  \Oderopay\Model\Webhook\Payment $message */
-                $paymentId = $message->getData()['paymentId'];
+                $data = $message->getData();
+                $paymentId = sanitize_text_field($data['paymentId']);
 
                 //find order with payment id
                 $findOrderArgs = array(
@@ -584,7 +587,10 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
                 /** @var WC_Order $order */
                 $order = wc_get_order($orders->posts[0]->ID);
 
-                if($order->get_payment_method() !== 'oderopay') return;
+                if($order->get_payment_method() !== 'oderopay') {
+                    $this->log('Callback Received but skipped');
+					return;
+				}
 
                 if ($message->getStatus() === 'SUCCESS'){
                     //set order as paid
