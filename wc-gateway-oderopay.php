@@ -35,6 +35,7 @@ function woocommerce_oderopay_init() {
 	load_plugin_textdomain( 'wc-gateway-oderopay', false, trailingslashit( dirname( plugin_basename( __FILE__ ) ) ) );
 
 	add_filter( 'woocommerce_payment_gateways', 'woocommerce_oderopay_add_gateway' );
+	add_action( 'rest_api_init', 'oderopay_register_rest_route' );
 }
 add_action( 'plugins_loaded', 'woocommerce_oderopay_init', 0 );
 
@@ -98,3 +99,21 @@ function woocommerce_oderopay_woocommerce_blocks_support() {
     }
 }
 add_action( 'woocommerce_blocks_loaded', 'woocommerce_oderopay_woocommerce_blocks_support' );
+
+function oderopay_register_rest_route() {
+	register_rest_route(
+		'wc',
+		'/odero/(?P<id>[a-zA-Z0-9-]+)/verify/',
+		[
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => function( $request ) {
+				$gateways = WC()->payment_gateways()->payment_gateways();
+				if ( isset( $gateways['oderopay'] ) ) {
+					return $gateways['oderopay']->verify_odero_payment( $request );
+				}
+				return new WP_Error( 'odero_error', 'OderoPay gateway not found', [ 'status' => 500 ] );
+			},
+			'permission_callback' => '__return_true',
+		]
+	);
+}

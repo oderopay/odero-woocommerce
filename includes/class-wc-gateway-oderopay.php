@@ -117,22 +117,6 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 		add_action( 'woocommerce_receipt_oderopay', array( $this, 'receipt_page' ) );
 		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
 
-
-		#add route for check odero payment
-		add_action( 'rest_api_init', function() {
-			register_rest_route(
-				'wc',
-				'/odero/(?P<id>[a-zA-Z0-9-]+)/verify/',
-				[
-					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => [$this, 'verify_odero_payment'],
-					'permission_callback' => function(){
-						return true;
-					}
-				]
-			);
-		});
-
 		$merchantId     = !$this->sandbox ? $this->merchant_id : $this->merchant_id_sandbox;
 		$merchantToken  = !$this->sandbox ? $this->merchant_token : $this->merchant_token_sandbox;
 
@@ -276,15 +260,27 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 	public function verify_odero_payment(WP_REST_Request $data)
 	{
 		$params = $data->get_params();
+		$order_id  = isset( $params[ 'id' ] ) ? absint( $params[ 'id' ] ) : 0;
+		$order_key = isset( $params[ 'key' ] ) ? sanitize_text_field( $params[ 'key' ] ) : '';
 
-		$order_id = $params['id'];
-
-		if (!$order_id){
-			throw new InvalidArgumentException('order id is required');
+		if ( empty( $order_id ) || empty( $order_key ) ) {
+			return new WP_Error(
+					'rest_missing_callback_param',
+					__( 'Both order ID and key are required.', 'wc-gateway-oderopay' ),
+					[ 'status' => 400 ]
+			);
 		}
 
 		/** @var WC_Order $order */
-		$order = wc_get_order(sanitize_text_field($params['id']));
+		$order = wc_get_order( $order_id );
+
+		if ( ! $order || $order->get_order_key() !== $order_key ) {
+			return new WP_Error(
+					'rest_forbidden',
+					__( 'Invalid order ID or key.', 'wc-gateway-oderopay' ),
+					[ 'status' => 403 ]
+			);
+		}
 
 		$oderoPaymentId = $order->get_meta(self::ODERO_PAYMENT_KEY);
 
@@ -512,8 +508,12 @@ class WC_Gateway_OderoPay extends WC_Payment_Gateway
 			$cartTotal += $couponItem->getTotal();
 		}
 
-		$returnUrl = wp_sprintf('%s?rest_route=/wc/odero/%s/verify', esc_attr(site_url('/')), $order->get_order_number());
+		$returnUrl = add_query_arg([
+				'rest_route' => sprintf('/wc/odero/%s/verify', $order->get_order_number()),
+				'key'        => $order->get_order_key(),
+		], site_url('/'));
 		$returnUrl = wp_nonce_url($returnUrl, 'wp_rest');
+		$returnUrl = html_entity_decode($returnUrl);
 
 		$cartTotal  = sprintf("%.2f", $cartTotal);
 		$paymentRequest = new \Oderopay\Model\Payment\Payment();
